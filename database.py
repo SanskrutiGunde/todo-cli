@@ -46,8 +46,9 @@ def delete_todo(position):
             change_position(pos, pos-1, False)
 
 def change_position(old_position: int, new_position: int, commit=True):
-    c.execute('UPDATE todos SET position = :position_new WHERE position = position_old',
+    c.execute('UPDATE todos SET position = :position_new WHERE position = :position_old', 
                 {'position_old': old_position, 'position_new': new_position})
+
     if commit:
         conn.commit()
 
@@ -55,14 +56,15 @@ def change_position(old_position: int, new_position: int, commit=True):
 def update_todo(position: int, task:str, category:str):
     with conn:
         if task is not None and category is not None:
-            c.execute('UPDATE todos SET task = task, category = category WHERE position = :position',
+            c.execute('UPDATE todos SET task = :task, category = :category WHERE position = :position',
                         {'position': position, 'task':task, 'category': category})
         elif task is not None:
-            c.execute('UPDATE totos SET task = :task WHERE position = :position',
+            c.execute('UPDATE todos SET task = :task WHERE position = :position',
                         {'position': position, 'task': task})
         elif category is not None:
-            c.execute('UPDATE totos SET category = :category WHERE position = :position',
+            c.execute('UPDATE todos SET category = :category WHERE position = :position',
                         {'position': position, 'category': category})
+
 
 def complete_todo(position: int):
     with conn:

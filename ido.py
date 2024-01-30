@@ -1,3 +1,4 @@
+from typing_extensions import Annotated
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -22,8 +23,8 @@ def delete(position: int):
     delete_todo(position-1)
     show()
 
-@app.command()
-def update(position: int, task: str = None, category: str = None):
+@app.command(short_help='updates an item')
+def update(position: Annotated[int, typer.Argument()], task: Annotated[str, typer.Option(prompt=True)] = None, category: Annotated[str, typer.Option(prompt=True)] = None):
     typer.echo(f"updating {position}")
     update_todo(position-1, task, category)
     show()
